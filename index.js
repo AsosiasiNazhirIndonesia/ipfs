@@ -1,14 +1,26 @@
 const ipfsClient = require('ipfs-http-client')
 const express = require('express')
+const cors = require('cors')
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const fs = require('fs')
-
-const ipfs = new ipfsClient({host:'localhost', port: '5001', protocol:'http'})
+const projectId = '2JRgSlpcFAFTDTvmS9ntQqfFkUZ';
+const projectSecret = '29ffe1fe5dee36c49c82a6ad045c3259';
+const auth =
+    'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
+const ipfs = new ipfsClient({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+        authorization: auth,
+    },
+})
 const app = express()
-
+app.use(cors({origin: '*'}));
 app.set('view engine','ejs')
 app.use(bodyParser.urlencoded({extended:true}))
+
 app.use(fileUpload())
 
 
@@ -19,9 +31,9 @@ app.get('/', (req,res) => {
 
 app.post('/upload', (req, res) => {
      const file = req.files.file
-     const fileName = req.body.fileName
-     const filePath =   'files/' + fileName
-
+     const fileName = req.body.filename
+     console.dir(req);
+     const filePath =   './files/' + fileName
      file.mv(filePath, async (err) => {
          if (err) {
             console.log('error: failed to download the file.')
@@ -31,14 +43,13 @@ app.post('/upload', (req, res) => {
      fs.unlink(filePath, (err) =>{
          if (err) console.log(err)
      })  
-         
      res.render('upload', {fileName, fileHash})
      })
 })
 
 const addFile = async (fileName, filePath) => {
     const file = fs.readFileSync(filePath)
-   const fileAdded = await ipfs.add({path:fileName, content:file})
+   const fileAdded = await ipfs.add({path:fileName, content:file},{ wrapWithDirectory: true })
   
 
 
@@ -47,6 +58,6 @@ const addFile = async (fileName, filePath) => {
     return fileHash
 }
 
-app.listen(3000,'127.0.0.1', () => {
-    console.log('Server is running on port 3000')
+app.listen(5000, () => {
+    console.log('Server is running on port 5000')
 })
