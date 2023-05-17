@@ -1,0 +1,8 @@
+npx sequelize-cli model:generate --name User --attributes supervisor:bigint,name:string,email:string,picture:string,password:string,blockchain_public:string,blockchain_private:string,last_login:date,score1:integer,score2:integer,score3:integer,score4:integer,score5:integer,score6:integer,score7:integer,score8:integer,score9:integer,score10:integer,forgot_password_code:integer,email_verif_code:integer,done_referring:integer,done_verified:integer,my_referral_code:integer,referred_by:integer
+npx sequelize-cli model:generate --name Referrals --attributes userId:integer,email:string
+npx sequelize-cli model:generate --name Voucher --attributes name:string,price:integer,picture:string,description:text
+npx sequelize-cli model:generate --name TrxRedeemVoucher --attributes userId:integer,voucherId:integer,date:date,description:text,transactionHash:text
+
+npx sequelize-cli db:migrate
+npx sequelize-cli db:migrate:undo
+npx sequelize-cli db:migrate:undo:all

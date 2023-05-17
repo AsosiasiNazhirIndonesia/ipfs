@@ -1,0 +1,30 @@
+{
+  "development": {
+    "username": "root",
+    "password": "P@ssw0rdP@ssw0rd",
+    "database": "piji",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "presarioCQ45",
+    "database": "db_telkom",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "presarioCQ45",
+    "database": "db_telkom",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "uim": {
+    "username": "root",
+    "password": "presarioCQ45",
+    "database": "db_uim",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
