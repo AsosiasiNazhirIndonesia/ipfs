@@ -13,9 +13,12 @@ module.exports = (app, forms) => {
    router.get("/verif/:email",[authJwt.verifyToken], user.emailVerif);
    router.get("/verifdone/:email",[authJwt.verifyToken], user.emailVerifDone);
    router.put("/:id/update",[forms.single('picture'),authJwt.verifyToken], user.update);
+   router.put("/:id/updatescore",[forms.single('picture'),authJwt.verifyToken], user.updatescore);
    router.get("/verify/:address",[authJwt.verifyToken], user.checkAddress);
    router.post("/encrypt",[forms.single('picture'),authJwt.verifyToken], user.encrypt);
    router.post("/decrypt",[forms.single('picture'),authJwt.verifyToken], user.decrypt);
+   router.post("/submitreview",[forms.single('picture'),authJwt.verifyToken], user.submitReview);
+   router.post("/like",[forms.single('picture'),authJwt.verifyToken], user.like);
 
     app.use('/api/user', router);
 };

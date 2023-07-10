@@ -80,10 +80,14 @@ exports.punishOrRedeem = (body) => {
         });
 };
 
-exports.reward = (body) => {
+exports.reward = (to,amount) => {
     // punishOrRedeem
-    console.log(body);
-    return axios.post(urlToken + "reward", body)
+
+    return axios.post(urlToken + "reward",     
+      {
+        to: to,
+        amount: amount
+      })
         .then((result) => {
             return result.data;
         })

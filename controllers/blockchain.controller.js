@@ -143,13 +143,13 @@ exports.reward = async (req, res) => {
 };
 
 exports.balance = async (req, res) => {
-    if (req.publicKey !== req.body.address) {
+    if (req.publicKey !== req.params.address) {
         return res.status(400).send({
             message: "blockchain address not match with this account.",
             data: []
         });
     }
-    let result = await BcService.getBalance(req.body.address);
+    let result = await BcService.getBalance(req.params.address);
 
     return res.status(200).send({
         message: "success get balance",

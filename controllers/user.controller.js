@@ -1,6 +1,7 @@
 const service = require("../services");
 const UserService = service.user;
-
+const UserMerchantReview = service.usermerchantreview;
+const BlockchainService = service.blockchain;
 
 /**
  * function index GetAll
@@ -218,3 +219,75 @@ exports.update = async (req, res) => {
     });
 };
 
+/*
+ * function updatescore
+ */
+exports.updatescore = async (req, res) => {
+    console.log('######################');
+    console.dir(req.body);
+
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Content cannot be empty!"
+        });
+    }
+    
+    let result1 = await UserService.update(req.params.id, req.body, req.file);
+
+    let currentUser = await UserService.findById(req.params.id);
+    let to = currentUser.blockchain_public;
+
+    let amount = 0;
+    if (req.body.score1 !== undefined) { amount = req.body.score1 }
+    if (req.body.score2 !== undefined) { amount = req.body.score2 }
+    if (req.body.score3 !== undefined) { amount = req.body.score3 }
+    if (req.body.score4 !== undefined) { amount = req.body.score4 }
+    if (req.body.score5 !== undefined) { amount = req.body.score5 }
+    if (req.body.score6 !== undefined) { amount = req.body.score6 }
+    if (req.body.score7 !== undefined) { amount = req.body.score7 }
+    if (req.body.score8 !== undefined) { amount = req.body.score8 }
+    if (req.body.score9 !== undefined) { amount = req.body.score9 }
+    if (req.body.score10 !== undefined) { amount = req.body.score10 }
+    console.log('######################');
+    console.log(to);
+    console.log(amount);
+    let result2 = await BlockchainService.reward(to,amount);
+    if (result2 == undefined) {
+        return res.status(400).send({
+            message: "fail to send token!"
+        });
+    }
+    
+    console.log(result2.txHash);
+    return res.status(200).send({
+        message: "success update? " + result1 + " with tx hash:" + result2.txHash
+    });
+};
+
+/*
+ * function update
+ */
+exports.submitReview = async (req, res) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Content cannot be empty!"
+        });
+    }
+    let result = await UserService.submitreview(req.body);
+    return res.status(200).send({
+        message: "success submit review " + result
+    });
+};
+
+/*
+ * function update
+ */
+exports.like = async (req, res) => {
+
+    let reviewRecord = await UserMerchantReview.findBy({userId: req.body.userid, merchantId: req.body.merchantid});
+    console.dir(reviewRecord);
+    let result = await UserMerchantReview.like(reviewRecord.id, reviewRecord.isLiked);
+    return res.status(200).send({
+        message: "success liked " + result
+    });
+};

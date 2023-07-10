@@ -1,6 +1,7 @@
 const db = require("../models");
 // const BcService = require("./blockchain");
 const User = db.User;
+const UserMerchantReview = db.UserMerchantReview;
 const Referrals = db.Referrals;
 // const Utils = require("../helpers/utils.helper");
 const Email = require("../helpers/email.helper");
@@ -29,7 +30,8 @@ exports.create = async (body, file) => {
         name: body.name,
         email: body.email,
         password: body.password,
-        referred_by: body.referred_by,            
+        referred_by: body.referred_by,  
+        birthday: body.birthday,          
         blockchain_public: result.address,
         blockchain_private: result.privateKey,
         my_referral_code: Math.floor(Math.random() * 1000000)
@@ -74,8 +76,15 @@ exports.decrypt = (text) => {
     let encryptedText = Buffer.from(text.encryptedData, 'hex');
     let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
     let decrypted = decipher.update(encryptedText);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-    return decrypted.toString();
+    try
+    {
+        decrypted = Buffer.concat([decrypted, decipher.final()]);
+        return decrypted.toString();    
+    }
+    catch (err) 
+        { 
+            console.log(">> Error finding user : ", err);
+        }
  }
 
 exports.checkAddress = (address) => {
@@ -158,7 +167,13 @@ exports.pagination = (pageSize, page, whereArr) => {
 /**
  * function update document
  */
-exports.update = (id, body) => {
+
+exports.update = (id, body, file) => {
+    // body.picture = 'no_image.jpg';
+
+    if (file !== undefined) {
+        body.picture = file.filename;
+    }
     return User.update(body, {
         where: {
             id: id
@@ -167,6 +182,26 @@ exports.update = (id, body) => {
         console.log(">> Error update document type : ", err);
     });
 };
+
+/**
+ * function submitreview
+ */
+
+ exports.submitreview = (body) => {
+    
+    return UserMerchantReview.create({
+        userId: body.userid,
+        merchantId: body.merchantid,
+        description: body.description,
+        rating: body.rating
+    }).then(result => {
+        return result;
+    }).catch((err) => {
+
+        console.log(">> Error submitting review : ", err);
+    });
+};
+
 
 /**
  * function find all for dropdown

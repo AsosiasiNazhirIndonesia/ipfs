@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         password: DataTypes.STRING,
         blockchain_public: DataTypes.STRING,
         blockchain_private: DataTypes.STRING,
+        birthday: DataTypes.DATE,
         last_login: DataTypes.DATE,
         score1: DataTypes.BIGINT,
         score2: DataTypes.BIGINT,
