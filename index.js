@@ -32,10 +32,11 @@ app.get('/', (req,res) => {
 app.post('/upload', (req, res) => {
      const file = req.files.file
      const fileName = req.body.filename
-     console.dir(req);
      const filePath =   './files/' + fileName
+     console.log(filePath);
      file.mv(filePath, async (err) => {
          if (err) {
+            console.log(err)
             console.log('error: failed to download the file.')
             return res.status(500).send(err)
          }
