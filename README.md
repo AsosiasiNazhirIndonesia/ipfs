@@ -1,5 +1,5 @@
 Cara menjalankan
- 1. git clone 'https://github.com/monocerusworld/interface.git
+ 1. git clone 'https://github.com/AsosiasiNazhirIndonesia/ipfs.git'
  2. Gunakan Node versi 10.17.0
  3. npm install
  4. pastikan port 3000 sudah dibuka
